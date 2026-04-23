@@ -1,0 +1,136 @@
+---
+import { events } from "@/data/events";
+---
+
+<section
+  id="events"
+  class="border-t border-slate-200/90 bg-white py-24 sm:py-28"
+  aria-labelledby="events-heading"
+>
+  <div class="page-shell">
+    <p class="text-xs font-bold font-label uppercase tracking-[0.2em] text-sea">In Action</p>
+    <h2 id="events-heading" class="mt-3 text-3xl font-semibold text-ink md:text-4xl lg:text-5xl">
+      Events In Our Community
+    </h2>
+
+    <div class="mt-10 divide-y-2 divide-slate-900 border-y-2 border-slate-900">
+      {
+        events.map((event, index) => (
+          <details class="group">
+            <summary class="list-none cursor-pointer px-3 py-6 md:px-4 md:py-7">
+              <div class="grid items-center gap-4 md:grid-cols-[1.05fr_1.3fr_auto] md:gap-6">
+                <h3 class="text-4xl font-medium uppercase tracking-wide text-ink md:text-5xl">
+                  {event.title}
+                </h3>
+                <p class="text-lg italic leading-tight text-ink/90 md:text-[1.65rem]">
+                  {event.goal}
+                </p>
+                <span
+                  class="inline-flex h-12 w-12 items-center justify-center text-6xl font-light leading-none text-ink transition-transform duration-200 group-open:rotate-45"
+                  aria-hidden="true"
+                >
+                  +
+                </span>
+              </div>
+            </summary>
+
+            <div class="grid gap-6 px-3 pb-8 md:grid-cols-2 md:px-4 md:pb-10">
+              <div>
+                <article class="min-h-[11.5rem] rounded-xl bg-[#f0f2f8] p-5">
+                  <h4 class="text-3xl font-semibold uppercase tracking-[0.06em] text-ink">Overview</h4>
+                  <p class="mt-3 text-lg leading-relaxed text-ink/85">
+                    {event.description}
+                  </p>
+                </article>
+
+                {
+                  event.gallery && (
+                    <div class="mt-4">
+                      <p class="text-sm font-semibold uppercase tracking-[0.08em] text-ink/90">
+                        Click to enlarge
+                      </p>
+                      <div
+                        class="event-gallery mt-3 flex flex-wrap gap-3"
+                        data-event-gallery
+                        data-event-id={event.id}
+                      >
+                        {event.gallery.map((photo, photoIndex) => (
+                          <button
+                            type="button"
+                            class="event-thumb relative h-14 w-20 overflow-visible rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                            data-event-thumb
+                            data-event-src={photo.src}
+                            data-event-alt={photo.alt}
+                            aria-pressed={photoIndex === 0 ? "true" : "false"}
+                          >
+                            <span
+                              class:list={[
+                                "pointer-events-none absolute -inset-[3px] rounded-[0.75rem] border-2 border-accent transition-opacity",
+                                photoIndex === 0 ? "opacity-100" : "opacity-0",
+                              ]}
+                              data-event-thumb-ring
+                              aria-hidden="true"
+                            ></span>
+                            <img
+                              src={photo.src}
+                              alt={photo.alt}
+                              class="h-full w-full rounded-lg object-cover"
+                              loading="lazy"
+                            />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                }
+              </div>
+              <div class="overflow-hidden rounded-xl bg-[#8fb8ff]">
+                <img
+                  src={event.image}
+                  alt={event.imageAlt}
+                  class="h-full w-full object-cover"
+                  loading={index < 2 ? "eager" : "lazy"}
+                  data-event-main-image={event.id}
+                />
+              </div>
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  const galleries = document.querySelectorAll("[data-event-gallery]");
+
+  galleries.forEach((gallery) => {
+    const eventId = gallery.getAttribute("data-event-id");
+    if (!eventId) return;
+
+    const mainImage = document.querySelector(`[data-event-main-image="${eventId}"]`);
+    if (!(mainImage instanceof HTMLImageElement)) return;
+
+    const buttons = gallery.querySelectorAll("[data-event-thumb]");
+    const setActive = (activeButton) => {
+      buttons.forEach((button) => {
+        const isActive = button === activeButton;
+        button.setAttribute("aria-pressed", isActive ? "true" : "false");
+        const ring = button.querySelector("[data-event-thumb-ring]");
+        ring?.classList.toggle("opacity-100", isActive);
+        ring?.classList.toggle("opacity-0", !isActive);
+      });
+    };
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const nextSrc = button.getAttribute("data-event-src");
+        const nextAlt = button.getAttribute("data-event-alt");
+        if (!nextSrc) return;
+        mainImage.src = nextSrc;
+        if (nextAlt) mainImage.alt = nextAlt;
+        setActive(button);
+      });
+    });
+  });
+</script>

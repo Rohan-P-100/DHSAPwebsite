@@ -1,0 +1,45 @@
+---
+import "@/styles/global.css";
+import SiteHeader from "@/components/SiteHeader.astro";
+import SiteFooter from "@/components/SiteFooter.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = "Denmark High School AP Ambassadors — student leaders cultivating a culture of excellence in Advanced Placement and our community.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.cdnfonts.com" crossorigin />
+    <!-- Brand kit: League Spartan + Quicksand (Google); Lovelo, Glacial Indifference, Brittany (CDNFonts — confirm license for production). -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://fonts.cdnfonts.com/css/glacial-indifference-2" rel="stylesheet" />
+    <link href="https://fonts.cdnfonts.com/css/lovelo" rel="stylesheet" />
+    <link href="https://fonts.cdnfonts.com/css/brittany" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen bg-slate-100 text-ink">
+    <SiteHeader />
+    <main class="relative z-0">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

@@ -1,0 +1,249 @@
+---
+/** 2025 program outcomes — edit values here as needed */
+const gradeCounts = [
+  { label: "Freshman", value: 308 },
+  { label: "Sophomores", value: 366 },
+  { label: "Juniors", value: 370 },
+  { label: "Seniors", value: 274 },
+] as const;
+
+const historicalRates = [
+  { year: "2021", pct: 74 },
+  { year: "2022", pct: 83 },
+  { year: "2023", pct: 83 },
+  { year: "2024", pct: 85 },
+  { year: "2025", pct: 92 },
+] as const;
+
+const passRate = 92;
+const apTestsTaken = 2834;
+const studentsRegistered = 1318;
+const scoredFiveCount = 521;
+const averageScore = 3.8;
+
+/** Line breaks match layout reference. Badge: `public/images/badge_icon.png`. */
+const academicHonors = [
+  { value: "179", showBadge: true, line1: "AP", line2: "SCHOLARS" },
+  { value: "112", showBadge: false, line1: "AP SCHOLARS", line2: "WITH HONOR" },
+  { value: "375", showBadge: false, line1: "AP SCHOLARS", line2: "WITH DISTINCTION" },
+] as const;
+---
+
+<section
+  id="impact"
+  class="border-t border-slate-200/90 bg-white py-24 sm:py-28"
+  aria-labelledby="impact-heading"
+>
+  <div class="page-shell">
+    <p class="text-xs font-bold font-label uppercase tracking-[0.2em] text-sea">Our Impact</p>
+    <h2
+      id="impact-heading"
+      class="mt-3 text-3xl font-semibold leading-tight text-ink md:text-4xl lg:text-5xl"
+      aria-describedby="impact-data-note"
+    >
+      Program Outcomes At A Glance
+    </h2>
+    <p
+      id="impact-data-note"
+      class="mt-2 max-w-3xl text-sm italic leading-relaxed text-ink/80 sm:mt-3 sm:text-base"
+    >
+      All Insights Based On Official 2025 AP Data
+    </p>
+
+    <!-- Top row: grade grid + stacked totals -->
+    <div class="mt-8 grid gap-4 sm:mt-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-5">
+      <article
+        class="flex h-full min-h-[14rem] flex-col justify-center rounded-2xl bg-[#f1f3f6] p-5 sm:p-6 md:p-7"
+      >
+        <div
+          class="mx-auto grid w-full max-w-md grid-cols-2 gap-x-12 gap-y-8 sm:max-w-2xl sm:gap-x-16 sm:gap-y-10 md:max-w-3xl md:gap-x-20 md:gap-y-10 lg:gap-x-24"
+        >
+          {
+            gradeCounts.map((row) => (
+              <div class="grid min-w-0 w-full grid-cols-[minmax(0,1fr)_auto] items-end gap-x-3 sm:gap-x-4 md:gap-x-5">
+                <p class="min-w-0 text-[0.65rem] font-semibold uppercase leading-tight tracking-[0.06em] text-slate-500 sm:text-xs md:text-sm">
+                  {row.label}
+                </p>
+                <p class="shrink-0 text-right text-4xl font-bold tabular-nums leading-none text-ink sm:text-5xl md:text-6xl lg:text-7xl">
+                  {row.value}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </article>
+
+      <div class="grid gap-4">
+        <article class="rounded-2xl bg-[#f1f3f6] px-5 py-5 sm:px-6 sm:py-6">
+          <div class="flex items-center justify-between gap-4">
+            <p class="text-base font-semibold uppercase leading-tight tracking-wide text-slate-500 sm:text-lg md:text-xl">
+              <span class="block">AP Tests</span>
+              <span class="block">Taken</span>
+            </p>
+            <p class="text-3xl font-bold tabular-nums text-ink sm:text-4xl md:text-5xl">
+              {apTestsTaken.toLocaleString()}
+            </p>
+          </div>
+        </article>
+        <article class="rounded-2xl bg-[#f1f3f6] px-5 py-5 sm:px-6 sm:py-6">
+          <div class="flex items-center justify-between gap-4">
+            <p class="text-base font-semibold uppercase leading-tight tracking-wide text-slate-500 sm:text-lg md:text-xl">
+              <span class="block">Students</span>
+              <span class="block">Registered</span>
+            </p>
+            <p class="text-3xl font-bold tabular-nums text-ink sm:text-4xl md:text-5xl">
+              {studentsRegistered.toLocaleString()}
+            </p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- Middle row: pass rate donut + historical bars -->
+    <div class="mt-4 grid gap-4 lg:grid-cols-2 lg:gap-5">
+      <article class="rounded-2xl bg-[#f1f3f6] p-6 sm:p-8 md:p-10" aria-labelledby="pass-rate-heading">
+        <div class="flex min-h-[13rem] items-stretch gap-8 sm:min-h-[15rem] md:min-h-[17rem] sm:gap-10 md:gap-12">
+          <div class="flex min-w-0 flex-1 flex-col">
+            <h3
+              id="pass-rate-heading"
+              class="text-left text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 sm:text-sm"
+            >
+              Pass Rate
+            </h3>
+            <div class="flex flex-1 items-center pt-2">
+              <p class="text-7xl font-bold tabular-nums leading-none tracking-tight text-ink sm:text-8xl md:text-9xl lg:text-[8.5rem] xl:text-[9.5rem]">
+                {passRate}%
+              </p>
+            </div>
+          </div>
+          <div class="flex shrink-0 items-center justify-end">
+            <div
+              class="relative grid h-44 w-44 place-items-center rounded-full sm:h-52 sm:w-52 md:h-60 md:w-60 lg:h-[15.5rem] lg:w-[15.5rem]"
+              style={`background: conic-gradient(from 0deg, #112249 0% ${100 - passRate}%, #81bde5 ${100 - passRate}% 100%);`}
+              aria-hidden="true"
+            >
+              <div class="grid h-[58%] w-[58%] place-items-center rounded-full bg-[#f1f3f6] sm:h-[59%] sm:w-[59%] md:h-[60%] md:w-[60%]"></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article
+        class="rounded-2xl bg-[#f1f3f6] p-6 sm:p-8 md:p-10"
+        aria-labelledby="historical-rates-heading"
+      >
+        <h3
+          id="historical-rates-heading"
+          class="text-left text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 sm:text-sm"
+        >
+          Historical Rates
+        </h3>
+        <div
+          class="mt-6 flex h-60 items-end justify-between gap-1 px-0 sm:h-64 sm:gap-1.5 md:h-72 md:gap-2"
+          role="img"
+          aria-label="Historical pass rates by year"
+        >
+          {
+            historicalRates.map((bar) => {
+              const barMaxPx = 240;
+              const barHeightPx = Math.round((bar.pct / 92) * barMaxPx);
+              const isCurrentYear = bar.year === "2025";
+              return (
+                <div class="flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-1.5 sm:gap-2">
+                  <div
+                    class:list={[
+                      "flex w-full max-w-[6.25rem] flex-col items-stretch justify-start rounded-t-xl shadow-sm sm:max-w-[7rem] md:max-w-[7.5rem]",
+                      /** Same #112249 as the pass-rate donut “gap” ring (not ink token) */
+                      isCurrentYear ? "bg-[#112249]" : "bg-[#7eb8e8]",
+                    ]}
+                    style={{ height: `${barHeightPx}px` }}
+                  >
+                    <span class="w-full px-1 pt-2.5 text-center text-xs font-semibold tabular-nums leading-none text-white sm:pt-3 sm:text-sm">
+                      {bar.pct}%
+                    </span>
+                  </div>
+                  <span
+                    class:list={[
+                      "text-xs font-medium tabular-nums sm:text-sm",
+                      isCurrentYear ? "font-semibold text-[#112249]" : "text-slate-600",
+                    ]}
+                  >
+                    {bar.year}
+                  </span>
+                </div>
+              );
+            })
+          }
+        </div>
+      </article>
+    </div>
+
+    <!-- Stats banner — black border & type on white -->
+    <div
+      class="mt-4 flex flex-col items-center justify-center gap-3 rounded-2xl border-[3px] border-black bg-white px-6 py-3.5 font-bold leading-tight text-black sm:flex-row sm:gap-8 sm:px-10 sm:py-4 md:gap-12 md:px-12 md:py-4"
+      role="region"
+      aria-label="Key score outcomes"
+    >
+      <p class="max-w-xl text-center text-xl sm:text-left md:max-w-none md:text-2xl lg:text-3xl">
+        <span>{scoredFiveCount} Students </span>
+        <span>Scored a 5</span>
+        <span> On Atleast 1 Exam</span>
+      </p>
+      <span
+        class="h-2.5 w-2.5 shrink-0 rounded-full bg-black sm:h-3 sm:w-3"
+        aria-hidden="true"
+      ></span>
+      <p class="text-center text-xl md:text-2xl lg:text-3xl">
+        Average Score: <span class="tabular-nums">{averageScore}</span>
+      </p>
+    </div>
+
+    <!-- Academic Honors — black bar; badge + three columns + inset dividers -->
+    <div
+      class="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-black shadow-sm"
+      role="region"
+      aria-label="Academic honors"
+    >
+      <div
+        class="flex flex-col gap-8 px-5 py-5 sm:grid sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] sm:items-center sm:gap-x-3 sm:gap-y-0 sm:px-8 sm:py-5 md:gap-x-5 md:py-5"
+      >
+        {
+          academicHonors.map((col, index) => (
+            <>
+              {index > 0 ? (
+                <div
+                  class="mx-auto h-px w-16 shrink-0 bg-white/50 sm:mx-0 sm:h-14 sm:w-px sm:self-center"
+                  aria-hidden="true"
+                />
+              ) : null}
+              <div
+                class:list={[
+                  "flex min-w-0 items-center gap-3 sm:gap-4 md:gap-5",
+                  col.showBadge ? "justify-start sm:-ml-1 md:-ml-2" : "justify-center",
+                ]}
+              >
+                {col.showBadge ? (
+                  <img
+                    src="/images/badge_icon.png"
+                    alt=""
+                    width="96"
+                    height="96"
+                    class="h-16 w-16 shrink-0 -translate-x-1 object-contain sm:h-20 sm:w-20 sm:-translate-x-2 md:h-24 md:w-24 md:-translate-x-3"
+                    loading="lazy"
+                  />
+                ) : null}
+                <p class="shrink-0 text-5xl font-bold tabular-nums text-white md:text-6xl lg:text-7xl">
+                  {col.value}
+                </p>
+                <div class="min-w-0 text-left text-xs font-bold uppercase leading-tight tracking-wide text-white sm:text-sm md:text-base">
+                  <span class="block">{col.line1}</span>
+                  <span class="block">{col.line2}</span>
+                </div>
+              </div>
+            </>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
