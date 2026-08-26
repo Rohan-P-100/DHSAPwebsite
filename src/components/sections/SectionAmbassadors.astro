@@ -1,0 +1,147 @@
+---
+import { ambassadorGroups, byLastName } from "@/data/ambassadors";
+
+const groups = ambassadorGroups.map((group) => ({
+  ...group,
+  members: [...group.members].sort(byLastName),
+}));
+---
+
+<section
+  id="ambassadors"
+  class="border-t border-slate-200/90 bg-white py-24 sm:py-28"
+  aria-labelledby="ambassadors-heading"
+>
+  <div class="page-shell">
+    <div class="max-w-4xl">
+      <p class="text-xs font-bold font-label uppercase tracking-[0.2em] text-sea">
+        Current Ambassadors
+      </p>
+      <h2
+        id="ambassadors-heading"
+        class="mt-3 text-3xl font-semibold text-ink md:text-4xl lg:text-5xl"
+      >
+        Meet This Year's Team
+      </h2>
+    </div>
+
+    {
+      groups.map((group, index) => (
+        <div class={index === 0 ? "mt-12" : "mt-16"}>
+          <h3
+            id={`ambassadors-${group.id}`}
+            class="text-center text-2xl font-medium text-ink md:text-3xl"
+          >
+            {group.heading}
+          </h3>
+
+          {group.members.length > 0 ? (
+            <div
+              class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+              aria-labelledby={`ambassadors-${group.id}`}
+            >
+              {group.members.map((person) => (
+                <article class="overflow-hidden rounded-[1.5rem] bg-[#dfe2eb] text-center">
+                  <div class="relative aspect-[5/4] overflow-hidden rounded-t-[1.5rem] bg-gradient-to-b from-[#abd7f1] to-[#e7f2f8]">
+                    <img
+                      src={person.photo}
+                      alt={person.photoAlt}
+                      class="h-full w-full object-cover object-top"
+                      loading="lazy"
+                    />
+                    {person.role && (
+                      <div class="absolute inset-x-0 top-0 bg-ink/90 px-4 py-3 text-center backdrop-blur-[2px]">
+                        <p class="font-label text-[0.95rem] font-bold uppercase tracking-[0.16em] text-white">
+                          {person.role}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                  <div class="px-5 py-6">
+                    <h4 class="text-[1.65rem] font-semibold leading-tight text-black">
+                      {person.name}
+                    </h4>
+                    <p class="ambassador-bio mt-2 line-clamp-3 text-[1.15rem] leading-snug text-black/90">
+                      {person.bio}
+                    </p>
+                    <button
+                      type="button"
+                      class="bio-toggle mt-2 hidden text-[0.95rem] font-semibold text-sea underline underline-offset-2 transition-colors hover:text-ink"
+                      aria-expanded="false"
+                    >
+                      Read more
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div class="mt-10 rounded-2xl border border-slate-200 bg-[#f3f6fb] px-6 py-10 text-center">
+              <p class="text-xl font-semibold text-ink md:text-2xl">
+                {group.heading} are being finalized.
+              </p>
+              <p class="mt-2 text-base text-ink/75 md:text-lg">
+                Names and photos will be posted once the roster is confirmed.
+              </p>
+            </div>
+          )}
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  function eachCard(fn) {
+    document.querySelectorAll("#ambassadors article").forEach((card) => {
+      const bio = card.querySelector(".ambassador-bio");
+      const button = card.querySelector(".bio-toggle");
+      if (bio && button) fn(bio, button);
+    });
+  }
+
+  // Show the toggle only where the clamped text is actually cut off.
+  // Re-measured after fonts load and on resize, since both change wrapping.
+  function measure() {
+    eachCard((bio, button) => {
+      if (button.getAttribute("aria-expanded") === "true") return; // leave open cards alone
+      bio.classList.add("line-clamp-3");
+      const overflows = bio.scrollHeight - bio.clientHeight > 1;
+      button.classList.toggle("hidden", !overflows);
+    });
+  }
+
+  function bind() {
+    eachCard((bio, button) => {
+      if (button.dataset.bound) return;
+      button.dataset.bound = "1";
+      button.addEventListener("click", () => {
+        const expanded = button.getAttribute("aria-expanded") === "true";
+        bio.classList.toggle("line-clamp-3", expanded);
+        button.setAttribute("aria-expanded", expanded ? "false" : "true");
+        button.textContent = expanded ? "Read more" : "Read less";
+      });
+    });
+  }
+
+  function init() {
+    bind();
+    measure();
+    // Web fonts change line wrapping after first paint — measure again once ready.
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+    // Belt and braces for slow font loads.
+    window.addEventListener("load", measure);
+  }
+
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(measure, 150);
+  });
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+</script>
